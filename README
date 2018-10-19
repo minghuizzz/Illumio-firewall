@@ -1,0 +1,31 @@
+To implement a Firewall class, there are several strategies considering the trade of time and space.
+So I first implement an abstract class named Firewall so that I can implement several different firewall subclass.
+This class contains an abstract method called acceptPacket which must be overridden by its subclasses.
+And also have some non-abstract methods to be shared among its subclasses. (checkPort & checkIP)
+
+Then I first consider the situation where the space of the system is limited.
+In this case, we do not want to store the rules in any collections so that the space complexity could be O(1).
+This means each time the acceptPacket method is called, the csv file should be read once.
+And I just use a for loop to check if the given parameters(direction, protocol, port, ip) are matched to any rules in the file.
+So the time complexity is O(n), where n is the number of rules in the file.
+
+And then I consider the situation where the time matters more.
+In this case, we want to store the rules of the file in some data structure, so that we can access quickly later.
+Since the direction can only be "inbound" or "outbound"; the protocol can only be "tcp" or "udp";
+the port can only be a integer between [1,65535]; and the ip address can only be in [0.0.0.0, 255,255,255,255],
+we can simply use a boolean[2][2][65535][255][255][255][255] to represent the acceptable status of all combinations.
+Yet if the number of rules is not that big, there will be plenty of unused space in the array. So we can use Map instead of arrays.
+But in this assignment, I consider 65535 is not a very big constant. So I just use String[2][2][65535][1],
+where each String in it is the ranges of ip address for the specific direction, protocol and port.
+So when calling acceptPacket, we just access the array to get acceptable ip ranges and see if our ip is in them.
+This may not be the best solution, but in 90 mins, this is the best I can do.
+The optimization I can think of is to merge the ranges of ip address, instead of simply concatenating them.
+And use Map to substitute the array of size 65535.
+
+I used JUnit to test my functions. and in 90 minutes, I only wrote a simple csv file and several basic test cases.
+And beyond 90 minutes, I added some test cases and some comments.
+
+Finally, the teams I prefer are Platform Team and Data Team. I think I can be a good match for the position of the Platform Team.
+The Data Team is also interested to me, but I think I might have to learn more things first if I entered the Data Team.
+
+Thanks for the opportunity!
